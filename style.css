@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');
 html,body{
     margin:0;
+    font-family: 'Kalam', cursive;
+    font-size: 1.3rem;
 }
 #container{
     display: flex;
@@ -8,7 +12,7 @@ html,body{
     height: 100vh;
     background-color: darkgray;
     flex-direction: column;
-    gap:70px;
+    gap:30px;
 }
 #gameboard{
     width:60vh;
@@ -28,4 +32,31 @@ html,body{
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+button{
+    appearance: none;
+    background-color: bisque;
+    border:0px;
+    border-radius: 20px;
+    padding: 10px;
+    font-family: 'Kalam', cursive;
+    font-size: 1.2rem;
+    margin: 10px;
+}
+button:active{
+    transform: scale(0.9);
+}
+label,div{
+    text-align: center;
+    font-size: 1.2rem;
+}
+input[type='text']{
+    background-color: bisque;
+    border:0px;
+    font-family: 'Kalam', cursive;
+    font-size: 1.2rem;
+    border-radius: 20px;
+}
+.wrong{
+    background-color: red;
 }

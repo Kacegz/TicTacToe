@@ -1,12 +1,10 @@
 function playGame(firstplayer,secondplayer){
-    let round=0;
+    let round=1;
     const boxes=document.querySelectorAll(".box");
     const playerFactory = (name,sign) =>{
         return {name,sign}
     };
-    function getPlayers(){
 
-    }
     const player1=playerFactory(firstplayer,'X')
     const player2=playerFactory(secondplayer,'O');
     const bot=playerFactory('bot','O');
@@ -26,20 +24,21 @@ function playGame(firstplayer,secondplayer){
         });
     }
     function move(e){//player makes move by clicking dom element
+        modifyScreen.displaymessage(player1.name+" turn")
         board[e.target.id]=gameboard.currentplayer.sign;
         if(secondplayer=="bot"&&gameboard.board.filter(function(x){return x==""}).length!==0){
             botmove()
         }
         checkWinner(gameboard.currentplayer);
         e.target.removeEventListener('click',move)
-
     }
+
     function botmove(){
+        modifyScreen.displaymessage("Good luck!")
         let botChoice=Math.floor(Math.random()*9)
         console.log("bot "+botChoice)
         console.log(gameboard.board[botChoice])
-        while((gameboard.board[botChoice]!=="")&&gameboard.board.filter(function(x){return x==""}).length!==0){
-            
+        while((gameboard.board[botChoice]!=="")&&gameboard.board.filter(function(x){return x==""}).length!==0){ //randomize number till its an empty tile
             botChoice=Math.floor(Math.random()*9)
         }
         gameboard.board[botChoice]=player2.sign;
@@ -63,58 +62,42 @@ function playGame(firstplayer,secondplayer){
             boxes.forEach(box => {
                 box.removeEventListener('click',move)
             });
-            console.log(current.name+" wins!")
-        }else if(gameboard.board.filter(function(x){return x==""}).length===0){
+            modifyScreen.displaymessage(current.name+" won!")
+            modifyScreen.displayrestart(player1,player2)
+            
+        }else if(gameboard.board.filter(function(x){return x==""}).length===0){ //play till there are no more tiles left
             gameboard.refresh();
-            console.log("tie!!!!!!!!!")
+            modifyScreen.displaymessage("Tie")
+            modifyScreen.displayrestart(player1,player2)
         }else{
             //if no one wins play another round and change player
-            nextRound();
-            if(secondplayer=="bot"){
-                /*let botChoice
-                do{
-                    botChoice=Math.floor(Math.random()*9)
-                    console.log(gameboard.board[botChoice])
-                    gameboard.board[botChoice]=bot.sign
-                }while(gameboard.board[botChoice]=="")
-                console.log("bot "+botChoice)
-                
-                let botChoice=Math.floor(Math.random()*9)
-                console.log("bot "+botChoice)
-                console.log(gameboard.board[botChoice])
-                while(gameboard.board[botChoice]!==undefined){
-                    botChoice=Math.floor(Math.random()*9)
-                }
-                gameboard.board[botChoice]=player2.sign;
-                gameboard.refresh();
-                */
-            }else{
-                changeTurn(gameboard.currentplayer);
+            if(secondplayer!=="bot"){
+                changeTurn(gameboard.currentplayer);//if there is a real player swap them
+                nextRound();
             }
-            //changeTurn(gameboard.currentplayer);
         }
     }
     function changeTurn(currentplayer){
         if(currentplayer==player1){
             console.log( player2.name+" turn")
+            modifyScreen.displaymessage(player2.name+" turn")
             return gameboard.currentplayer=player2;
         }else{
             console.log(player1.name+" turn")
+            modifyScreen.displaymessage(player1.name+" turn")
             return gameboard.currentplayer=player1;
         }
     }
     const nextRound=()=>{
         round++;
-        console.log("Round "+round)
         gameboard.refresh();
     }
+     
     (function start(){
         gameboard.refresh();
-        console.log("Round "+round)
-        console.log(player1.name+" turn")
+        modifyScreen.displaymessage("Round 1")
         startPlaying();
     })();
-    
 };
 const modifyScreen={
     coop: function generateNicknames(){
@@ -148,10 +131,47 @@ const modifyScreen={
         applybutton.addEventListener('click',modifyScreen.sendData)
     },
     sendData: function sendData(){
-        const firstplayer=document.querySelector("#nickname1").value
-        const secondplayer=document.querySelector("#nickname2").value
+        const firstplayer=document.querySelector("#nickname1")
+        const secondplayer=document.querySelector("#nickname2")
         const panel=document.querySelector("#info");
-        panel.textContent=""
-        playGame(firstplayer,secondplayer)
+        if(firstplayer.value!=="" && secondplayer.value!==""){
+            panel.textContent=""
+            playGame(firstplayer.value,secondplayer.value)
+        }else{
+            firstplayer.setAttribute("placeholder","Enter your name!")
+            secondplayer.setAttribute("placeholder","Enter your name!")
+        }
+    },
+    displayrestart: function displayrestart(player1,player2){
+        const panel=document.querySelector("#info");
+        const applybutton=document.createElement("button");
+        applybutton.setAttribute("id","apply")
+        applybutton.textContent="Restart game!";
+        applybutton.addEventListener('click',playGame.bind(this,player1.name,player2.name))
+        panel.appendChild(applybutton)
+    },
+    singleplayer: function singleplayer(){
+        const panel=document.querySelector("#info");
+        panel.textContent="";
+        const applybutton=document.createElement("button");
+        applybutton.setAttribute("id","apply");
+        applybutton.textContent="Restart game!";
+        applybutton.setAttribute('onclick',"playGame('player','bot')");
+        panel.appendChild(applybutton);
+        playGame('You','bot');
+    },
+    displayrounds: function displayRounds(round){
+        const panel=document.querySelector("#info");
+        
+        const messagebox=document.createElement('div');
+        messagebox.textContent=round;
+        panel.appendChild(messagebox);
+    },
+    displaymessage: function displayMessage(message){
+        const panel=document.querySelector("#info");
+        panel.textContent="";
+        const messagebox=document.createElement('div');
+        messagebox.textContent=message;
+        panel.appendChild(messagebox);
     }
 }
