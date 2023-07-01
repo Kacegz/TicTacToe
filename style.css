@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kalam&display=swap');
 html,body{
     margin:0;
-    font-family: 'Kalam', cursive;
+    font-family: 'Kalam', cursive,sans-serif;
     font-size: 1.3rem;
 }
 #container{
@@ -10,7 +9,7 @@ html,body{
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: darkgray;
+    background-color: rgb(194, 175, 146);
     flex-direction: column;
     gap:30px;
 }
@@ -50,13 +49,19 @@ label,div{
     text-align: center;
     font-size: 1.2rem;
 }
+div{
+    font-size: 1.6rem;
+}
 input[type='text']{
     background-color: bisque;
     border:0px;
     font-family: 'Kalam', cursive;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border-radius: 20px;
 }
 .wrong{
     background-color: red;
+}
+.box{
+    font-size: 3rem;
 }
