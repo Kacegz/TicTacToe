@@ -58,6 +58,7 @@ input[type='text']{
     font-family: 'Kalam', cursive;
     font-size: 1rem;
     border-radius: 20px;
+    padding-left: 10px;
 }
 .wrong{
     background-color: red;
